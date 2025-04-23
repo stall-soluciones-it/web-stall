@@ -247,8 +247,8 @@ a.cta-button:hover, button.cta-button:hover {
   text-align: center;
   color: #FFFFFF;
   padding-top: 80px;
-  position: relative; /* Para posicionar partículas */
-  overflow: hidden; /* Evitar desbordamiento */
+  position: relative;
+  overflow: hidden;
 }
 
 #particles-js {
@@ -257,12 +257,12 @@ a.cta-button:hover, button.cta-button:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1; /* Detrás del contenido */
+  z-index: 1;
 }
 
 .hero .container {
   position: relative;
-  z-index: 2; /* Contenido encima de partículas */
+  z-index: 2;
 }
 
 .hero-logo {
@@ -323,6 +323,20 @@ a.cta-button:hover, button.cta-button:hover {
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.service-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.service-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .service-card .service-icon {
@@ -556,7 +570,21 @@ a.cta-button:hover, button.cta-button:hover {
   justify-content: center;
   width: 60px;
   height: 60px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Transición para escalado */
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1); /* Escala al 110% en hover */
+  opacity: 0.9;
+}
+
+.whatsapp-float-inner {
+  display: block;
+  animation: bounce 4s infinite; /* Saltito cada 4 segundos */
+}
+
+.whatsapp-float:hover .whatsapp-float-inner {
+  animation-play-state: paused; /* Pausar animación de saltito en hover */
 }
 
 .whatsapp-float img {
@@ -565,23 +593,31 @@ a.cta-button:hover, button.cta-button:hover {
   vertical-align: middle;
 }
 
-.whatsapp-float:hover {
-  transform: scale(1.1);
-  opacity: 0.9;
+/* Animación de saltito */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0); /* Posición inicial */
+  }
+  40% {
+    transform: translateY(-10px); /* Sube 10px */
+  }
+  60% {
+    transform: translateY(-5px); /* Baja un poco para rebote */
+  }
 }
 
 /* Media Queries - WhatsApp Button Mobile */
 @media (max-width: 768px) {
   .whatsapp-float {
-      width: 50px;
-      height: 50px;
-      bottom: 15px;
-      right: 15px;
+    width: 50px;
+    height: 50px;
+    bottom: 15px;
+    right: 15px;
   }
 
   .whatsapp-float img {
-      width: 50px;
-      height: 50px;
+    width: 50px;
+    height: 50px;
   }
 }
 

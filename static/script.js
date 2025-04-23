@@ -15,21 +15,20 @@ const setupParticles = () => {
   const particlesContainer = select('#particles-js');
   if (!particlesContainer || !window.particlesJS) return;
 
-  // Configuración base
   const baseConfig = {
     particles: {
       number: {
-        value: window.innerWidth <= 768 ? 40 : 60, // 40 partículas en móviles, 60 en escritorio
+        value: window.innerWidth <= 768 ? 40 : 60,
         density: {
           enable: true,
           value_area: 800
         }
       },
       color: {
-        value: ['#4682B4', '#87CEEB', '#D3D3D3'] // Colores de la marca
+        value: ['#4682B4', '#87CEEB', '#D3D3D3']
       },
       shape: {
-        type: 'circle', // Círculos para nodos de blockchain
+        type: 'circle',
         stroke: {
           width: 0,
           color: '#000000'
@@ -80,8 +79,8 @@ const setupParticles = () => {
     interactivity: {
       detect_on: 'canvas',
       events: {
-        onhover: { enable: false, mode: 'repulse' }, // Interactividad desactivada
-        onclick: { enable: false, mode: 'push' }, // Interactividad desactivada
+        onhover: { enable: false, mode: 'repulse' },
+        onclick: { enable: false, mode: 'push' },
         resize: true
       },
       modes: {
@@ -130,13 +129,21 @@ const setupHamburgerMenu = () => {
   });
 };
 
-// Función para manejar animaciones de fade-in
+// Función para manejar animaciones de fade-in y service cards
 const setupFadeInAnimations = () => {
   const observer = new IntersectionObserver(
     (entries) => {
-      entries.forEach((entry) => {
+      entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+          // Añadir retraso escalonado para service cards
+          const delay = entry.target.classList.contains('service-card')
+            ? index * 100 // 100ms de retraso por cada tarjeta
+            : 0;
+          
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, delay);
+          
           observer.unobserve(entry.target);
         }
       });
@@ -144,7 +151,8 @@ const setupFadeInAnimations = () => {
     { threshold: 0.1 }
   );
 
-  selectAll('.fade-in').forEach((element) => observer.observe(element));
+  // Observar tanto .fade-in como .service-card
+  selectAll('.fade-in, .service-card').forEach((element) => observer.observe(element));
 };
 
 // Función para manejar el formulario de contacto
