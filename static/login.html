@@ -6,9 +6,300 @@
     <meta name="theme-color" content="#4682B4">
     <link rel="canonical" href="https://stall.ar/login.html">
     <title>Acceso Clientes - stall</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2025042201">
-    <link rel="stylesheet" href="styles.css?v=2025042201">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2025042401">
+
+    <!-- Preconexión para Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+    <!-- CSS crítico inline -->
+    <style>
+      /* Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Body */
+      body {
+        font-family: 'Montserrat', sans-serif;
+        color: #D3D3D3;
+        background-color: #1C2526;
+        font-weight: 400;
+        font-size: 16px;
+      }
+
+      /* Container */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(to bottom, #1C2526, #2E3A3B);
+        padding: 20px 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        max-height: 80px;
+      }
+
+      .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+      }
+
+      .logo-img {
+        max-height: 50px;
+        object-fit: contain;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        position: relative;
+      }
+
+      .nav-list {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        flex: 1;
+        margin: 0 20px;
+      }
+
+      .nav-list li a {
+        color: #FFFFFF;
+        text-decoration: none;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        font-size: 17px;
+        line-height: 50px;
+        transition: color 0.3s ease;
+      }
+
+      .nav-list li a:hover {
+        color: #87CEEB;
+      }
+
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        z-index: 1002;
+      }
+
+      .hamburger span {
+        width: 25px;
+        height: 3px;
+        background-color: #FFFFFF;
+        transition: all 0.3s ease;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+      }
+
+      .nav-cta {
+        background-color: #4682B4;
+        color: #FFFFFF;
+        padding: 0 24px;
+        height: 34px;
+        border-radius: 5px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 17px;
+        line-height: 34px;
+        text-decoration: none;
+        transform: scale(1);
+        transition: background-color 0.3s ease, transform 0.4s ease, color 0.3s ease !important;
+        cursor: pointer;
+        display: inline-block;
+      }
+
+      .nav-list li.nav-cta-item a.nav-cta {
+        height: 34px;
+        line-height: 34px;
+        padding: 0 24px;
+        transition: background-color 0.3s ease, transform 0.4s ease, color 0.3s ease !important;
+      }
+
+      .nav-cta:hover {
+        background-color: #87CEEB;
+        color: #FFFFFF !important;
+        transform: scale(1.05);
+      }
+
+      .nav-cta-item {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      a.cta-button, button.cta-button {
+        background-color: #4682B4;
+        color: #FFFFFF;
+        padding: 8px 24px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 17px;
+        transition: background-color 0.3s ease, transform 0.4s ease;
+        display: inline-block;
+        border: none;
+        cursor: pointer;
+      }
+
+      a.cta-button:hover, button.cta-button:hover {
+        background-color: #87CEEB;
+        transform: scale(1.05);
+      }
+
+      @media (max-width: 768px) {
+        .nav-list {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            background: rgba(28, 37, 38, 0.95);
+            padding: 20px;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .nav-list.active {
+            display: flex !important;
+            max-height: 400px;
+            opacity: 1;
+        }
+
+        .nav-list li {
+            margin: 5px 0;
+            text-align: center;
+        }
+
+        .nav-list li a {
+            line-height: normal;
+        }
+
+        .nav-cta-item {
+            position: static;
+            transform: none;
+            margin: 5px 0;
+        }
+
+        .nav-cta {
+            margin: 0 auto;
+            width: fit-content;
+            height: auto;
+            line-height: normal;
+            padding: 4px 24px;
+        }
+
+        .hamburger {
+            display: flex;
+            z-index: 1003;
+        }
+
+        .logo-img {
+            max-height: 40px;
+        }
+
+        .nav {
+            justify-content: flex-end;
+        }
+
+        .nav-list {
+            flex-direction: column;
+            gap: 10px;
+            margin: 0;
+        }
+      }
+
+      /* Login Section */
+      .login-section {
+        padding: 100px 0;
+        background: linear-gradient(to bottom, #1C2526, #2E3A3B);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+
+      .login-section h2 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 40px;
+        color: #4682B4;
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .login-form {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .login-form label {
+        display: block;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        font-size: 17px;
+        color: #D3D3D3;
+        margin-bottom: 5px;
+      }
+
+      .login-form input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #D3D3D3;
+        border-radius: 5px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        font-size: 17px;
+        background-color: #2E3A3B;
+        color: #D3D3D3;
+      }
+
+      .login-form button {
+        width: 100%;
+      }
+
+      /* Eliminar foco para todos los elementos */
+      *:focus {
+        outline: none;
+      }
+    </style>
+
+    <!-- CSS no crítico (diferido) -->
+    <link rel="stylesheet" href="styles.css?v=2025042401" media="print" onload="this.media='all'">
   </head>
 
   <body>
@@ -16,7 +307,7 @@
     <header class="header">
       <div class="container">
           <a href="index.html">
-              <img src="logo-small-b.png?v=2025042201" alt="Stall Soluciones IT" class="logo-img">
+              <img src="logo-small-b.png?v=2025042401" alt="Stall Soluciones IT" class="logo-img">
           </a>
           <nav class="nav">
               <ul class="nav-list nav-links">
@@ -33,7 +324,7 @@
               <span></span>
           </div>
       </div>
-  </header>
+    </header>
 
     <!-- Login Section -->
     <section class="login-section">
@@ -53,7 +344,7 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="container">
-        <img src="logo-small-b.png?v=2025042201" alt="Logo de stall Soluciones IT" class="footer-logo">
+        <img src="logo-small-b.png?v=2025042401" alt="Logo de stall Soluciones IT" class="footer-logo">
         <ul class="footer-nav">
           <li><a href="index.html#inicio">Inicio</a></li>
           <li><a href="index.html#servicios">Servicios</a></li>
@@ -64,7 +355,7 @@
       </div>
     </footer>
 
-    <script src="script.js?v=2025042201"></script>
-    <script src="login.js?v=2025042201"></script>
+    <script src="script.js?v=2025042401"></script>
+    <script src="login.js?v=2025042401"></script>
   </body>
 </html>

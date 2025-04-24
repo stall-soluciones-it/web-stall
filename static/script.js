@@ -10,7 +10,7 @@ const selectAll = (selector, context = document) => {
   return Array.from(context.querySelectorAll(selector));
 };
 
-// Función para configurar particles.js
+// Configuración de particles.js para la sección Hero
 const setupParticles = () => {
   const particlesContainer = select('#particles-js');
   if (!particlesContainer || !window.particlesJS) return;
@@ -19,48 +19,13 @@ const setupParticles = () => {
     particles: {
       number: {
         value: window.innerWidth <= 768 ? 40 : 60,
-        density: {
-          enable: true,
-          value_area: 800
-        }
+        density: { enable: true, value_area: 800 }
       },
-      color: {
-        value: ['#4682B4', '#87CEEB', '#D3D3D3']
-      },
-      shape: {
-        type: 'circle',
-        stroke: {
-          width: 0,
-          color: '#000000'
-        }
-      },
-      opacity: {
-        value: 0.5,
-        random: true,
-        anim: {
-          enable: false,
-          speed: 1,
-          opacity_min: 0.1,
-          sync: false
-        }
-      },
-      size: {
-        value: 3,
-        random: true,
-        anim: {
-          enable: true,
-          speed: 2,
-          size_min: 1,
-          sync: false
-        }
-      },
-      line_linked: {
-        enable: true,
-        distance: 150,
-        color: '#87CEEB',
-        opacity: 0.3,
-        width: 1
-      },
+      color: { value: ['#4682B4', '#87CEEB', '#D3D3D3'] },
+      shape: { type: 'circle', stroke: { width: 0, color: '#000000' } },
+      opacity: { value: 0.5, random: true, anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false } },
+      size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 1, sync: false } },
+      line_linked: { enable: true, distance: 150, color: '#87CEEB', opacity: 0.3, width: 1 },
       move: {
         enable: true,
         speed: 2,
@@ -69,20 +34,12 @@ const setupParticles = () => {
         straight: false,
         out_mode: 'out',
         bounce: false,
-        attract: {
-          enable: false,
-          rotateX: 600,
-          rotateY: 1200
-        }
+        attract: { enable: false, rotateX: 600, rotateY: 1200 }
       }
     },
     interactivity: {
       detect_on: 'canvas',
-      events: {
-        onhover: { enable: false, mode: 'repulse' },
-        onclick: { enable: false, mode: 'push' },
-        resize: true
-      },
+      events: { onhover: { enable: false, mode: 'repulse' }, onclick: { enable: false, mode: 'push' }, resize: true },
       modes: {
         grab: { distance: 400, line_linked: { opacity: 1 } },
         bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 },
@@ -97,11 +54,10 @@ const setupParticles = () => {
   particlesJS('particles-js', baseConfig);
 };
 
-// Función para manejar el menú hamburguesa
+// Manejo del menú hamburguesa para dispositivos móviles
 const setupHamburgerMenu = () => {
   const hamburger = select('.hamburger');
   const navList = select('.nav-list');
-
   if (!hamburger || !navList) return;
 
   const toggleMenu = () => {
@@ -129,21 +85,16 @@ const setupHamburgerMenu = () => {
   });
 };
 
-// Función para manejar animaciones de fade-in y service cards
+// Animaciones de fade-in para secciones y tarjetas de servicios
 const setupFadeInAnimations = () => {
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-          // Añadir retraso escalonado para service cards
-          const delay = entry.target.classList.contains('service-card')
-            ? index * 100 // 100ms de retraso por cada tarjeta
-            : 0;
-          
+          const delay = entry.target.classList.contains('service-card') ? index * 100 : 0;
           setTimeout(() => {
             entry.target.classList.add('visible');
           }, delay);
-          
           observer.unobserve(entry.target);
         }
       });
@@ -151,16 +102,14 @@ const setupFadeInAnimations = () => {
     { threshold: 0.1 }
   );
 
-  // Observar tanto .fade-in como .service-card
   selectAll('.fade-in, .service-card').forEach((element) => observer.observe(element));
 };
 
-// Función para manejar el formulario de contacto
+// Manejo del formulario de contacto
 const setupContactForm = () => {
   const form = select('#contact-form');
   const message = select('#form-message');
   const submitButton = form?.querySelector('button[type="submit"]');
-
   if (!form || !message || !submitButton) return;
 
   const showMessage = (text, isSuccess) => {
@@ -218,23 +167,21 @@ const setupContactForm = () => {
   });
 };
 
-// Función para configurar enlaces dinámicos de contacto
+// Configuración de enlaces dinámicos de contacto
 const setupContactLinks = () => {
   const emailLink = select('#emailink');
   const phoneLink = select('#phone');
-
   if (emailLink) {
     emailLink.innerHTML =
       '<a href="mailto:info@stall.ar" class="contact-link" title="Enviar un correo a info@stall.ar">info@stall.ar</a>';
   }
-
   if (phoneLink) {
     phoneLink.innerHTML =
       '<a href="tel:+5492233004040" class="contact-link" title="Llamar al 223 300 4040">+54 9 223 300 4040</a>';
   }
 };
 
-// Inicializar todo cuando el DOM esté cargado
+// Inicialización al cargar el DOM
 document.addEventListener('DOMContentLoaded', () => {
   setupParticles();
   setupHamburgerMenu();
