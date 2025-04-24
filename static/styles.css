@@ -669,3 +669,8 @@ a.cta-button:hover, button.cta-button:hover {
 .login-form button {
   width: 100%;
 }
+
+/* Eliminar foco para todos los elementos */
+*:focus {
+  outline: none;
+}
