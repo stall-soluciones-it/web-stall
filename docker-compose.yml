@@ -13,6 +13,20 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
 
   backend:
     build:
@@ -23,6 +37,20 @@ services:
     networks:
       - isolated_network
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').request('http://localhost:3000/health', { method: 'GET' }, (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }).end()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
 
 networks:
   isolated_network:

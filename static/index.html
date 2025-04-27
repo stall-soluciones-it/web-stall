@@ -11,7 +11,7 @@
     <!-- Open Graph -->
     <meta property="og:title" content="stall - Soluciones IT">
     <meta property="og:description" content="Soluciones tecnológicas en infraestructura, redes, apps y software a medida.">
-    <meta property="og:image" content="https://stall.ar/android-chrome-192x192.png?v=2025042501">
+    <meta property="og:image" content="https://stall.ar/android-chrome-192x192.png?v=2025042701">
     <meta property="og:url" content="https://stall.ar">
     <meta property="og:type" content="website">
 
@@ -19,7 +19,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="stall - Soluciones IT">
     <meta name="twitter:description" content="Soluciones tecnológicas en infraestructura, redes, apps y software a medida.">
-    <meta name="twitter:image" content="https://stall.ar/android-chrome-192x192.png?v=2025042501">
+    <meta name="twitter:image" content="https://stall.ar/android-chrome-192x192.png?v=2025042701">
 
     <link rel="canonical" href="https://stall.ar">
 
@@ -131,13 +131,13 @@
     </script>
 
     <title>stall - Soluciones IT</title>
-    <link rel="manifest" href="site.webmanifest?v=2025042501">
-    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2025042501">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2025042501">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2025042501">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=2025042501">
-    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png?v=2025042501">
-    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png?v=2025042501">
+    <link rel="manifest" href="site.webmanifest?v=2025042701">
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2025042701">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2025042701">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2025042701">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=2025042701">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png?v=2025042701">
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png?v=2025042701">
 
     <!-- Preconexión para Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -156,11 +156,22 @@
         box-sizing: border-box;
       }
 
+      /* Variables de color */
+      :root {
+        --primary: #4682B4;       /* Azul principal */
+        --primary-light: #87CEEB; /* Azul cielo */
+        --accent: #FF9966;        /* Naranja suave (nuevo color de acento) */
+        --dark: #1C2526;          /* Oscuro principal */
+        --dark-medium: #2E3A3B;   /* Oscuro medio */
+        --light: #D3D3D3;         /* Gris claro */
+        --white: #FFFFFF;         /* Blanco */
+      }
+
       /* Body */
       body {
         font-family: 'Montserrat', sans-serif;
-        color: #D3D3D3;
-        background-color: #1C2526;
+        color: var(--light);
+        background-color: var(--dark);
         font-weight: 400;
         font-size: 16px;
       }
@@ -174,13 +185,14 @@
 
       /* Header */
       .header {
-        background: linear-gradient(to bottom, #1C2526, #2E3A3B);
+        background: linear-gradient(to bottom, var(--dark), var(--dark-medium));
         padding: 20px 0;
         position: fixed;
         width: 100%;
         top: 0;
         z-index: 1000;
         max-height: 80px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
       }
 
       .header .container {
@@ -193,6 +205,13 @@
       .logo-img {
         max-height: 50px;
         object-fit: contain;
+        filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+        transition: filter 0.3s ease, transform 0.3s ease;
+      }
+
+      .logo-img:hover {
+        filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.3));
+        transform: scale(1.05);
       }
 
       .nav {
@@ -212,17 +231,36 @@
       }
 
       .nav-list li a {
-        color: #FFFFFF;
+        color: var(--white);
         text-decoration: none;
         font-family: 'Montserrat', sans-serif;
         font-weight: 500;
         font-size: 17px;
         line-height: 50px;
         transition: color 0.3s ease;
+        position: relative;
+      }
+
+      .nav-list li a::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: 10px;
+        left: 0;
+        background-color: var(--accent);
+        transform: scaleX(0);
+        transform-origin: bottom right;
+        transition: transform 0.3s ease;
       }
 
       .nav-list li a:hover {
-        color: #87CEEB;
+        color: var(--primary-light);
+      }
+
+      .nav-list li a:hover::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
       }
 
       .hamburger {
@@ -231,12 +269,17 @@
         gap: 5px;
         cursor: pointer;
         z-index: 1002;
+        transition: transform 0.3s ease;
+      }
+
+      .hamburger:hover {
+        transform: scale(1.1);
       }
 
       .hamburger span {
         width: 25px;
         height: 3px;
-        background-color: #FFFFFF;
+        background-color: var(--white);
         transition: all 0.3s ease;
       }
 
@@ -253,8 +296,8 @@
       }
 
       .nav-cta {
-        background-color: #4682B4;
-        color: #FFFFFF;
+        background-color: var(--primary);
+        color: var(--white);
         padding: 0 24px;
         height: 34px;
         border-radius: 5px;
@@ -267,6 +310,19 @@
         transition: background-color 0.3s ease, transform 0.4s ease, color 0.3s ease !important;
         cursor: pointer;
         display: inline-block;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-cta::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: -100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
       }
 
       .nav-list li.nav-cta-item a.nav-cta {
@@ -277,9 +333,13 @@
       }
 
       .nav-cta:hover {
-        background-color: #87CEEB;
-        color: #FFFFFF !important;
+        background-color: var(--accent);
+        color: var(--white) !important;
         transform: scale(1.05);
+      }
+
+      .nav-cta:hover::after {
+        left: 100%;
       }
 
       .nav-cta-item {
@@ -292,23 +352,63 @@
       }
 
       a.cta-button, button.cta-button {
-        background-color: #4682B4;
-        color: #FFFFFF;
+        background-color: var(--primary);
+        color: var(--white);
         padding: 8px 24px;
         text-decoration: none;
         border-radius: 5px;
         font-family: 'Montserrat', sans-serif;
         font-weight: 700;
         font-size: 17px;
-        transition: background-color 0.3s ease, transform 0.4s ease;
+        transition: background-color 0.3s ease, transform 0.4s ease, box-shadow 0.3s ease;
         display: inline-block;
         border: none;
         cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      a.cta-button::after, button.cta-button::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+        transition: transform 0.5s ease, opacity 0.5s ease;
       }
 
       a.cta-button:hover, button.cta-button:hover {
-        background-color: #87CEEB;
-        transform: scale(1.05);
+        background-color: var(--accent);
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      a.cta-button:active, button.cta-button:active {
+        transform: translateY(0) scale(0.98);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      a.cta-button:hover::after, button.cta-button:hover::after {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+        animation: pulse 1s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0.7;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(2);
+          opacity: 0;
+        }
       }
 
       @media (max-width: 768px) {
@@ -326,6 +426,7 @@
             transition: max-height 0.3s ease, opacity 0.3s ease;
             z-index: 1001;
             overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .nav-list.active {
@@ -343,6 +444,10 @@
             line-height: normal;
         }
 
+        .nav-list li a::after {
+            bottom: -2px;
+        }
+
         .nav-cta-item {
             position: static;
             transform: none;
@@ -354,7 +459,7 @@
             width: fit-content;
             height: auto;
             line-height: normal;
-            padding: 4px 24px;
+            padding: 8px 24px;
         }
 
         .hamburger {
@@ -379,12 +484,12 @@
 
       /* Hero Section */
       .hero {
-        background: linear-gradient(to bottom, #1C2526, #2E3A3B);
+        background: linear-gradient(to bottom, var(--dark), var(--dark-medium));
         height: 100vh;
         display: flex;
         align-items: center;
         text-align: center;
-        color: #FFFFFF;
+        color: var(--white);
         padding-top: 80px;
         position: relative;
         overflow: hidden;
@@ -408,6 +513,12 @@
         height: 180px;
         margin-bottom: 30px;
         filter: drop-shadow(0 4px 8px rgba(0, 0, 5, 0.6));
+        transition: transform 0.5s ease, filter 0.5s ease;
+      }
+
+      .hero-logo:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 5, 0.8));
       }
 
       .hero h1 {
@@ -415,7 +526,9 @@
         font-weight: 700;
         font-size: 52px;
         margin-bottom: 20px;
-        color: #4682B4;
+        color: var(--primary);
+        position: relative;
+        display: inline-block;
       }
 
       .hero p {
@@ -423,7 +536,10 @@
         font-weight: 400;
         font-size: 22px;
         margin-bottom: 30px;
-        color: #D3D3D3;
+        color: var(--light);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       /* Eliminar foco para todos los elementos */
@@ -433,7 +549,7 @@
     </style>
 
     <!-- CSS no crítico (diferido) -->
-    <link rel="stylesheet" href="styles.css?v=2025042501" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="styles.css?v=2025042701" media="print" onload="this.media='all'">
   </head>
 
   <body>
@@ -441,7 +557,7 @@
     <header class="header">
       <div class="container">
           <a href="index.html">
-              <img src="logo-small-b.png?v=2025042501" alt="Stall Soluciones IT" class="logo-img">
+              <img src="logo-small-b.png?v=2025042701" alt="Stall Soluciones IT" class="logo-img">
           </a>
           <nav class="nav">
               <ul class="nav-list nav-links">
@@ -464,7 +580,7 @@
     <section id="inicio" class="hero">
       <div id="particles-js"></div>
       <div class="container">
-        <img src="placeholder-logo.png?v=2025042501" alt="stall Logo Large" class="hero-logo">
+        <img src="placeholder-logo.png?v=2025042701" alt="stall Logo Large" class="hero-logo">
         <h1>Soluciones IT integrales en Balcarce y Mar del Plata</h1>
         <p>Servicios informáticos y desarrollo de software a medida para negocios en Balcarce, Mar del Plata y zona.</p>
         <a href="#servicios" class="cta-button">Descubrí nuestros servicios</a>
@@ -545,13 +661,13 @@
           <p><strong>Teléfono:</strong> <span id="phone"></span></p>
           <div class="social-links">
             <a href="https://wa.me/5492233004040?text=¡Hola!%20Quiero%20consultar%20sobre%20sus%20soluciones%20IT" class="social-icon" target="_blank" rel="noopener noreferrer">
-              <img src="ico_whatsapp.png?v=2025042501" alt="Chatear en WhatsApp">
+              <img src="ico_whatsapp.png?v=2025042701" alt="Chatear en WhatsApp">
             </a>
             <a href="https://github.com/stall12358" class="social-icon" target="_blank" rel="noopener noreferrer">
-              <img src="ico_github.png?v=2025042501" alt="Perfil de GitHub">
+              <img src="ico_github.png?v=2025042701" alt="Perfil de GitHub">
             </a>
             <a href="https://instagram.com/stall12358" class="social-icon" target="_blank" rel="noopener noreferrer">
-              <img src="ico_instagram.png?v=2025042501" alt="Perfil de Instagram">
+              <img src="ico_instagram.png?v=2025042701" alt="Perfil de Instagram">
             </a>
           </div>
         </div>
@@ -561,7 +677,7 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="container">
-        <img src="logo-small-b.png?v=2025042501" alt="stall Logo" class="footer-logo">
+        <img src="logo-small-b.png?v=2025042701" alt="stall Logo" class="footer-logo">
         <ul class="footer-nav">
           <li><a href="#inicio">Inicio</a></li>
           <li><a href="#servicios">Servicios</a></li>
@@ -575,10 +691,10 @@
     <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/5492233004040?text=¡Hola!%20Quiero%20consultar%20sobre%20sus%20soluciones%20IT" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Chatea con nosotros en WhatsApp">
       <span class="whatsapp-float-inner">
-        <img src="ico_whatsapp.png?v=2025042501" alt="Ícono de WhatsApp para chat">
+        <img src="ico_whatsapp.png?v=2025042701" alt="Ícono de WhatsApp para chat">
       </span>
     </a>
     <script defer src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script src="script.js?v=2025042501"></script>
+    <script src="script.js?v=2025042701"></script>
   </body>
 </html>

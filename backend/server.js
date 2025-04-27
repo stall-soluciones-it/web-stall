@@ -2,10 +2,22 @@ const express = require('express');
 const { create } = require('xmlbuilder2');
 const fs = require('fs');
 const cors = require('cors');
+// Importar rate limiter
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
 
 console.log('Starting server setup...');
 
 const app = express();
+
+// Configurar rate limiter
+const contactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 5, // limitar a 5 intentos por ventana por IP
+  standardHeaders: true, // Devolver info de rate limit en los headers `RateLimit-*`
+  legacyHeaders: false, // Deshabilitar los headers `X-RateLimit-*`
+  message: { message: 'Demasiados intentos desde esta IP, por favor intente más tarde' }
+});
 
 // Configurar CORS para permitir solo los dominios de stall
 app.use(
@@ -25,26 +37,44 @@ app.use((req, res, next) => {
 
 console.log('Middleware configured');
 
+// Validadores para el formulario
+const contactValidators = [
+  body('name')
+    .trim()
+    .notEmpty().withMessage('El nombre es requerido')
+    .isLength({ min: 2, max: 100 }).withMessage('El nombre debe tener entre 2 y 100 caracteres'),
+  body('email')
+    .trim()
+    .notEmpty().withMessage('El email es requerido')
+    .isEmail().withMessage('El formato de email es inválido')
+    .normalizeEmail(),
+  body('message')
+    .trim()
+    .notEmpty().withMessage('El mensaje es requerido')
+    .isLength({ min: 10, max: 1000 }).withMessage('El mensaje debe tener entre 10 y 1000 caracteres')
+    .escape()
+];
+
 // Endpoint de prueba
 app.get('/health', (req, res) => {
   console.log('Received request to /health');
   res.status(200).json({ message: 'Backend está funcionando correctamente' });
 });
 
-// Ruta para guardar el contacto en un archivo XML
-app.post('/save-contact', (req, res) => {
+// Aplicar rate limiting y validación al endpoint de contacto
+app.post('/save-contact', contactLimiter, contactValidators, (req, res) => {
   console.log('Received request to /save-contact');
+  
+  // Verificar errores de validación
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ 
+      message: 'Error de validación', 
+      errors: errors.array().map(err => err.msg)
+    });
+  }
+  
   const { name, email, message } = req.body;
-
-  // Validar datos
-  if (!name || !email || !message) {
-    return res.status(400).json({ message: 'Todos los campos son requeridos' });
-  }
-
-  // Validar formato de correo electrónico
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return res.status(400).json({ message: 'Correo electrónico inválido' });
-  }
 
   // Ruta del archivo XML
   const xmlFilePath = './data/contacts.xml';
@@ -56,6 +86,7 @@ app.post('/save-contact', (req, res) => {
       email,
       message,
       timestamp: new Date().toISOString(),
+      ip: req.ip || 'unknown', // Registrar IP para análisis de seguridad
     },
   };
 

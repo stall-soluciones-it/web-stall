@@ -4,11 +4,16 @@ FROM node:18-alpine
 # Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copiar los archivos del backend
-COPY backend /app
+# Copiar package.json y package-lock.json primero para aprovechar la caché
+COPY backend/package*.json ./
 
-# Instalar dependencias y curl (para depuraci�n)
-RUN apk add --no-cache curl && npm install
+# Instalar dependencias y curl (para depuración)
+RUN apk add --no-cache curl && \
+    npm install express-rate-limit express-validator --save && \
+    npm install
+
+# Copiar el resto de los archivos del backend
+COPY backend /app
 
 # Crear la carpeta /data con permisos adecuados
 RUN mkdir -p /app/data && chmod 700 /app/data && chown node:node /app/data

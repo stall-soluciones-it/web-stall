@@ -6,12 +6,15 @@
     <meta name="theme-color" content="#4682B4">
     <link rel="canonical" href="https://stall.ar/login.html">
     <title>Acceso Clientes - stall</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2025042501">
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2025042701">
 
     <!-- Preconexión para Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+    <!-- Font Awesome asíncrono -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
 
     <!-- CSS crítico inline -->
     <style>
@@ -22,11 +25,22 @@
         box-sizing: border-box;
       }
 
+      /* Variables de color */
+      :root {
+        --primary: #4682B4;       /* Azul principal */
+        --primary-light: #87CEEB; /* Azul cielo */
+        --accent: #FF9966;        /* Naranja suave (nuevo color de acento) */
+        --dark: #1C2526;          /* Oscuro principal */
+        --dark-medium: #2E3A3B;   /* Oscuro medio */
+        --light: #D3D3D3;         /* Gris claro */
+        --white: #FFFFFF;         /* Blanco */
+      }
+
       /* Body */
       body {
         font-family: 'Montserrat', sans-serif;
-        color: #D3D3D3;
-        background-color: #1C2526;
+        color: var(--light);
+        background-color: var(--dark);
         font-weight: 400;
         font-size: 16px;
       }
@@ -40,13 +54,14 @@
 
       /* Header */
       .header {
-        background: linear-gradient(to bottom, #1C2526, #2E3A3B);
+        background: linear-gradient(to bottom, var(--dark), var(--dark-medium));
         padding: 20px 0;
         position: fixed;
         width: 100%;
         top: 0;
         z-index: 1000;
         max-height: 80px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
       }
 
       .header .container {
@@ -59,6 +74,13 @@
       .logo-img {
         max-height: 50px;
         object-fit: contain;
+        filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+        transition: filter 0.3s ease, transform 0.3s ease;
+      }
+
+      .logo-img:hover {
+        filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.3));
+        transform: scale(1.05);
       }
 
       .nav {
@@ -78,17 +100,36 @@
       }
 
       .nav-list li a {
-        color: #FFFFFF;
+        color: var(--white);
         text-decoration: none;
         font-family: 'Montserrat', sans-serif;
         font-weight: 500;
         font-size: 17px;
         line-height: 50px;
         transition: color 0.3s ease;
+        position: relative;
+      }
+
+      .nav-list li a::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: 10px;
+        left: 0;
+        background-color: var(--accent);
+        transform: scaleX(0);
+        transform-origin: bottom right;
+        transition: transform 0.3s ease;
       }
 
       .nav-list li a:hover {
-        color: #87CEEB;
+        color: var(--primary-light);
+      }
+
+      .nav-list li a:hover::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
       }
 
       .hamburger {
@@ -97,12 +138,17 @@
         gap: 5px;
         cursor: pointer;
         z-index: 1002;
+        transition: transform 0.3s ease;
+      }
+
+      .hamburger:hover {
+        transform: scale(1.1);
       }
 
       .hamburger span {
         width: 25px;
         height: 3px;
-        background-color: #FFFFFF;
+        background-color: var(--white);
         transition: all 0.3s ease;
       }
 
@@ -119,8 +165,8 @@
       }
 
       .nav-cta {
-        background-color: #4682B4;
-        color: #FFFFFF;
+        background-color: var(--primary);
+        color: var(--white);
         padding: 0 24px;
         height: 34px;
         border-radius: 5px;
@@ -133,6 +179,19 @@
         transition: background-color 0.3s ease, transform 0.4s ease, color 0.3s ease !important;
         cursor: pointer;
         display: inline-block;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-cta::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: -100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
       }
 
       .nav-list li.nav-cta-item a.nav-cta {
@@ -143,9 +202,13 @@
       }
 
       .nav-cta:hover {
-        background-color: #87CEEB;
-        color: #FFFFFF !important;
+        background-color: var(--accent);
+        color: var(--white) !important;
         transform: scale(1.05);
+      }
+
+      .nav-cta:hover::after {
+        left: 100%;
       }
 
       .nav-cta-item {
@@ -158,23 +221,63 @@
       }
 
       a.cta-button, button.cta-button {
-        background-color: #4682B4;
-        color: #FFFFFF;
+        background-color: var(--primary);
+        color: var(--white);
         padding: 8px 24px;
         text-decoration: none;
         border-radius: 5px;
         font-family: 'Montserrat', sans-serif;
         font-weight: 700;
         font-size: 17px;
-        transition: background-color 0.3s ease, transform 0.4s ease;
+        transition: background-color 0.3s ease, transform 0.4s ease, box-shadow 0.3s ease;
         display: inline-block;
         border: none;
         cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      a.cta-button::after, button.cta-button::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+        transition: transform 0.5s ease, opacity 0.5s ease;
       }
 
       a.cta-button:hover, button.cta-button:hover {
-        background-color: #87CEEB;
-        transform: scale(1.05);
+        background-color: var(--accent);
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      a.cta-button:active, button.cta-button:active {
+        transform: translateY(0) scale(0.98);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      a.cta-button:hover::after, button.cta-button:hover::after {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+        animation: pulse 1s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0.7;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(2);
+          opacity: 0;
+        }
       }
 
       @media (max-width: 768px) {
@@ -192,6 +295,7 @@
             transition: max-height 0.3s ease, opacity 0.3s ease;
             z-index: 1001;
             overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .nav-list.active {
@@ -209,6 +313,10 @@
             line-height: normal;
         }
 
+        .nav-list li a::after {
+            bottom: -2px;
+        }
+
         .nav-cta-item {
             position: static;
             transform: none;
@@ -220,7 +328,7 @@
             width: fit-content;
             height: auto;
             line-height: normal;
-            padding: 4px 24px;
+            padding: 8px 24px;
         }
 
         .hamburger {
@@ -246,24 +354,66 @@
       /* Login Section */
       .login-section {
         padding: 100px 0;
-        background: linear-gradient(to bottom, #1C2526, #2E3A3B);
+        background: linear-gradient(to bottom, var(--dark), var(--dark-medium));
         min-height: 100vh;
         display: flex;
         align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, rgba(70, 130, 180, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
+        z-index: 0;
+      }
+
+      .login-section .container {
+        position: relative;
+        z-index: 1;
       }
 
       .login-section h2 {
         font-family: 'Montserrat', sans-serif;
         font-weight: 700;
         font-size: 40px;
-        color: #4682B4;
+        color: var(--primary);
         text-align: center;
         margin-bottom: 40px;
+        position: relative;
+      }
+
+      .login-section h2::after {
+        content: '';
+        position: absolute;
+        width: 60px;
+        height: 3px;
+        background-color: var(--accent);
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
       }
 
       .login-form {
         max-width: 400px;
         margin: 0 auto;
+        padding: 30px;
+        background-color: rgba(46, 58, 59, 0.7);
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(70, 130, 180, 0.1);
+        backdrop-filter: blur(5px);
+      }
+
+      .login-form:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
       }
 
       .login-form label {
@@ -271,25 +421,63 @@
         font-family: 'Montserrat', sans-serif;
         font-weight: 500;
         font-size: 17px;
-        color: #D3D3D3;
-        margin-bottom: 5px;
+        color: var(--light);
+        margin-bottom: 8px;
       }
 
       .login-form input {
         width: 100%;
-        padding: 10px;
+        padding: 12px;
         margin-bottom: 20px;
-        border: 1px solid #D3D3D3;
+        border: 1px solid rgba(211, 211, 211, 0.3);
         border-radius: 5px;
         font-family: 'Montserrat', sans-serif;
         font-weight: 400;
         font-size: 17px;
-        background-color: #2E3A3B;
-        color: #D3D3D3;
+        background-color: rgba(46, 58, 59, 0.6);
+        color: var(--light);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .login-form input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(70, 130, 180, 0.2);
       }
 
       .login-form button {
         width: 100%;
+        background-color: var(--primary);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .login-form button:hover {
+        background-color: var(--accent);
+        transform: translateY(-3px);
+      }
+
+      .form-message {
+        text-align: center;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        font-size: 17px;
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        color: #FF6B6B;
+        background-color: rgba(255, 107, 107, 0.1);
+        border: 1px solid rgba(255, 107, 107, 0.3);
+        display: none;
+      }
+
+      .form-message.error {
+        display: block;
+        animation: shake 0.5s ease;
+      }
+
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
       }
 
       /* Eliminar foco para todos los elementos */
@@ -299,7 +487,7 @@
     </style>
 
     <!-- CSS no crítico (diferido) -->
-    <link rel="stylesheet" href="styles.css?v=2025042501" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="styles.css?v=2025042701" media="print" onload="this.media='all'">
   </head>
 
   <body>
@@ -307,7 +495,7 @@
     <header class="header">
       <div class="container">
           <a href="index.html">
-              <img src="logo-small-b.png?v=2025042501" alt="Stall Soluciones IT" class="logo-img">
+              <img src="logo-small-b.png?v=2025042701" alt="Stall Soluciones IT" class="logo-img">
           </a>
           <nav class="nav">
               <ul class="nav-list nav-links">
@@ -344,7 +532,7 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="container">
-        <img src="logo-small-b.png?v=2025042501" alt="Logo de stall Soluciones IT" class="footer-logo">
+        <img src="logo-small-b.png?v=2025042701" alt="Logo de stall Soluciones IT" class="footer-logo">
         <ul class="footer-nav">
           <li><a href="index.html#inicio">Inicio</a></li>
           <li><a href="index.html#servicios">Servicios</a></li>
@@ -355,7 +543,7 @@
       </div>
     </footer>
 
-    <script src="script.js?v=2025042501"></script>
-    <script src="login.js?v=2025042501"></script>
+    <script src="script.js?v=2025042701"></script>
+    <script src="login.js?v=2025042701"></script>
   </body>
 </html>
