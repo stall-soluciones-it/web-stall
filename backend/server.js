@@ -10,10 +10,10 @@ console.log('Starting server setup...');
 
 const app = express();
 
-// Configurar rate limiter
+// Configurar rate limiter (aumentado a 15 intentos)
 const contactLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 5, // limitar a 5 intentos por ventana por IP
+  max: 15, // limitar a 15 intentos por ventana por IP
   standardHeaders: true, // Devolver info de rate limit en los headers `RateLimit-*`
   legacyHeaders: false, // Deshabilitar los headers `X-RateLimit-*`
   message: { message: 'Demasiados intentos desde esta IP, por favor intente más tarde' }

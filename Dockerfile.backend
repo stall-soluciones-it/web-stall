@@ -10,7 +10,8 @@ COPY backend/package*.json ./
 # Instalar dependencias y curl (para depuración)
 RUN apk add --no-cache curl && \
     npm install express-rate-limit express-validator --save && \
-    npm install
+    npm install && \
+    npm audit fix --force
 
 # Copiar el resto de los archivos del backend
 COPY backend /app

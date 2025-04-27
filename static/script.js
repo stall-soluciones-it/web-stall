@@ -10,7 +10,7 @@ const selectAll = (selector, context = document) => {
   return Array.from(context.querySelectorAll(selector));
 };
 
-// Configuración de particles.js para la sección Hero
+// Configuración de particles.js para la sección Hero - sin interacción para aliviar carga
 const setupParticles = () => {
   const particlesContainer = select('#particles-js');
   if (!particlesContainer || !window.particlesJS) return;
@@ -18,30 +18,30 @@ const setupParticles = () => {
   const baseConfig = {
     particles: {
       number: {
-        value: window.innerWidth <= 768 ? 40 : 60,
+        value: window.innerWidth <= 768 ? 30 : 45, // Reducido para aliviar carga
         density: { enable: true, value_area: 800 }
       },
-      color: { value: ['#4682B4', '#87CEEB', '#FF9966', '#D3D3D3'] }, // Añadido naranja como color de acento
+      color: { value: ['#4682B4', '#87CEEB', '#FF9966', '#D3D3D3'] },
       shape: { type: 'circle', stroke: { width: 0, color: '#000000' } },
-      opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } },
-      size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 1, sync: false } },
+      opacity: { value: 0.5, random: true, anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false } },
+      size: { value: 3, random: true, anim: { enable: false, speed: 2, size_min: 1, sync: false } },
       line_linked: { enable: true, distance: 150, color: '#87CEEB', opacity: 0.3, width: 1 },
       move: {
         enable: true,
-        speed: 2,
+        speed: 1.5, // Velocidad reducida
         direction: 'none',
         random: true,
         straight: false,
         out_mode: 'out',
         bounce: false,
-        attract: { enable: true, rotateX: 600, rotateY: 1200 } // Activado attract para mejor interactividad
+        attract: { enable: false, rotateX: 600, rotateY: 1200 } // Desactivado attract
       }
     },
     interactivity: {
       detect_on: 'canvas',
       events: { 
-        onhover: { enable: true, mode: 'repulse' }, // Activado onhover para mejor interactividad
-        onclick: { enable: true, mode: 'push' }, // Activado onclick para mejor interactividad
+        onhover: { enable: false, mode: 'repulse' }, // Desactivado
+        onclick: { enable: false, mode: 'push' }, // Desactivado
         resize: true 
       },
       modes: {
@@ -179,25 +179,6 @@ const setupServiceCardEffects = () => {
       }
     });
   });
-};
-
-// Animación de escritura para títulos
-const setupTypewriterEffect = () => {
-  const title = select('.hero h1');
-  if (!title) return;
-  
-  const text = title.textContent;
-  title.textContent = '';
-  
-  const typeText = (index = 0) => {
-    if (index <= text.length) {
-      title.textContent = text.substring(0, index);
-      setTimeout(() => typeText(index + 1), 50);
-    }
-  };
-  
-  // Iniciar la animación después de 500ms
-  setTimeout(typeText, 500);
 };
 
 // Manejo del formulario de contacto
@@ -472,7 +453,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupFadeInAnimations();
   setupParallaxEffect();
   setupServiceCardEffects();
-  setupTypewriterEffect();
   setupContactForm();
   setupContactLinks();
   setupSmoothScroll();
