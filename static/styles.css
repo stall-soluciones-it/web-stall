@@ -411,8 +411,9 @@
   transition: transform 0.3s ease;
 }
 
+/* Corrección para que los enlaces del footer tengan el mismo comportamiento que el header */
 .footer-nav li a:hover {
-  color: var(--accent);
+  color: var(--primary-light);
 }
 
 .footer-nav li a:hover::after {
