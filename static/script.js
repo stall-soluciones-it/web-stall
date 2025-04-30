@@ -10,10 +10,88 @@ const selectAll = (selector, context = document) => {
   return Array.from(context.querySelectorAll(selector));
 };
 
+// Funciones críticas para la carga inicial
+
+// Manejo del menú hamburguesa para dispositivos móviles
+const setupHamburgerMenu = () => {
+  const hamburger = select('.hamburger');
+  const navList = select('.nav-list');
+  if (!hamburger || !navList) return;
+
+  const toggleMenu = () => {
+    navList.classList.toggle('active');
+    hamburger.classList.toggle('active');
+  };
+
+  hamburger.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleMenu();
+  });
+
+  selectAll('a', navList).forEach((link) => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        toggleMenu();
+      }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (
+      navList.classList.contains('active') &&
+      !navList.contains(e.target) &&
+      !hamburger.contains(e.target)
+    ) {
+      toggleMenu();
+    }
+  });
+};
+
+// Animación para keyframes críticos - necesaria para estilos básicos
+const addAnimationStyles = () => {
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = `
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+    
+    .loading {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: loading 1.5s infinite;
+    }
+    
+    @keyframes loading {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+  `;
+  document.head.appendChild(styleSheet);
+};
+
+// Funciones secundarias - se cargarán después del renderizado principal
+
 // Configuración de particles.js para la sección Hero - sin interacción para aliviar carga
 const setupParticles = () => {
   const particlesContainer = select('#particles-js');
-  if (!particlesContainer || !window.particlesJS) return;
+  if (!particlesContainer || typeof particlesJS === 'undefined') return;
 
   const baseConfig = {
     particles: {
@@ -21,7 +99,7 @@ const setupParticles = () => {
         value: window.innerWidth <= 768 ? 30 : 45, // Reducido para aliviar carga
         density: { enable: true, value_area: 800 }
       },
-      color: { value: ['#4682B4', '#87CEEB', '#FF9966', '#D3D3D3'] },
+      color: { value: ['#4682B4', '#87CEEB', '#00e8bb', '#D3D3D3'] },
       shape: { type: 'circle', stroke: { width: 0, color: '#000000' } },
       opacity: { value: 0.5, random: true, anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false } },
       size: { value: 3, random: true, anim: { enable: false, speed: 2, size_min: 1, sync: false } },
@@ -58,50 +136,21 @@ const setupParticles = () => {
   particlesJS('particles-js', baseConfig);
 };
 
-// Manejo del menú hamburguesa para dispositivos móviles
-const setupHamburgerMenu = () => {
-  const hamburger = select('.hamburger');
-  const navList = select('.nav-list');
-  if (!hamburger || !navList) return;
-
-  const toggleMenu = () => {
-    navList.classList.toggle('active');
-    hamburger.classList.toggle('active');
-    
-    // Animación suave para el menú móvil
-    if (navList.classList.contains('active')) {
-      // Animar cada elemento del menú con delay escalonado
-      selectAll('li', navList).forEach((item, index) => {
-        item.style.opacity = '0';
-        item.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-          item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-          item.style.opacity = '1';
-          item.style.transform = 'translateY(0)';
-        }, 100 * index);
-      });
-    }
-  };
-
-  hamburger.addEventListener('click', (e) => {
-    e.preventDefault();
-    toggleMenu();
-  });
-
-  selectAll('a', navList).forEach((link) =>
-    link.addEventListener('click', toggleMenu)
-  );
-
-  document.addEventListener('click', (e) => {
-    if (
-      navList.classList.contains('active') &&
-      !navList.contains(e.target) &&
-      !hamburger.contains(e.target)
-    ) {
-      toggleMenu();
-    }
-  });
+// Arreglar el botón "Acceso clientes" que se mueve en la navegación
+const fixHeaderOnScroll = () => {
+  const header = select('.header');
+  const navCta = select('.nav-cta-item');
+  
+  if (!header || !navCta) return;
+  
+  // Asegurar que el header tenga una altura fija
+  header.style.maxHeight = '80px';
+  header.style.overflow = 'visible';
+  
+  // Asegurar que el botón de CTA permanezca fijo
+  navCta.style.position = 'absolute';
+  navCta.style.right = '20px';
+  navCta.style.zIndex = '100';
 };
 
 // Animaciones de fade-in para secciones y tarjetas de servicios
@@ -181,6 +230,29 @@ const setupServiceCardEffects = () => {
   });
 };
 
+// Arreglar los botones "Saber más" en tarjetas de servicio
+const fixServiceButtons = () => {
+  selectAll('.service-card .cta-button').forEach(button => {
+    // Mejorar el z-index para garantizar que el botón sea clickeable
+    button.style.position = 'relative';
+    button.style.zIndex = '10';
+    
+    button.addEventListener('click', function(event) {
+      const targetId = this.getAttribute('href');
+      if (targetId && targetId.startsWith('#')) {
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          event.preventDefault();
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
+  });
+};
+
 // Manejo del formulario de contacto
 const setupContactForm = () => {
   const form = select('#contact-form');
@@ -192,8 +264,6 @@ const setupContactForm = () => {
     message.textContent = text;
     message.classList.toggle('success', isSuccess);
     message.classList.toggle('error', !isSuccess);
-    
-    // Añadir animación al mostrar el mensaje
     message.style.animation = 'fadeIn 0.3s ease';
   };
 
@@ -201,8 +271,6 @@ const setupContactForm = () => {
     e.preventDefault();
     submitButton.disabled = true;
     submitButton.textContent = 'Enviando...';
-    
-    // Añadir efecto de carga al botón
     submitButton.classList.add('loading');
 
     try {
@@ -237,10 +305,8 @@ const setupContactForm = () => {
         true
       );
       
-      // Añadir animación de éxito al formulario
       form.style.animation = 'success 1s ease';
       
-      // Resetear formulario con animación
       setTimeout(() => {
         form.reset();
         form.style.animation = 'none';
@@ -252,7 +318,6 @@ const setupContactForm = () => {
         false
       );
       
-      // Añadir animación de error al formulario
       form.style.animation = 'shake 0.5s ease';
       setTimeout(() => {
         form.style.animation = 'none';
@@ -275,7 +340,6 @@ const setupContactForm = () => {
         field.style.borderColor = '';
       }
       
-      // Validación específica para email
       if (field.type === 'email' && field.value.trim() !== '') {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim())) {
           field.classList.add('error');
@@ -308,30 +372,16 @@ const setupContactLinks = () => {
 // Efecto smooth scroll para navegación
 const setupSmoothScroll = () => {
   selectAll('a[href^="#"]').forEach(anchor => {
+    if (anchor.classList.contains('cta-button')) return; // Ya manejado por fixServiceButtons
+
     anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      
       const targetId = this.getAttribute('href');
+      if (targetId === '#' || targetId === '') return;
+      
       const targetElement = select(targetId);
       
       if (targetElement) {
-        // Añadir animación al desplazamiento
-        window.scrollTo({
-          top: targetElement.offsetTop - 80, // Ajustar por el header fijo
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
-  
-  // Asegurar que los links a secciones funcionan correctamente
-  document.querySelectorAll('.service-card .cta-button').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const targetId = this.getAttribute('href');
-      const targetElement = document.querySelector(targetId);
-      
-      if (targetElement) {
+        e.preventDefault();
         window.scrollTo({
           top: targetElement.offsetTop - 80,
           behavior: 'smooth'
@@ -343,23 +393,57 @@ const setupSmoothScroll = () => {
 
 // Botón para volver arriba
 const setupScrollToTop = () => {
-  // Crear botón dinámicamente
   const scrollTopBtn = document.createElement('button');
   scrollTopBtn.className = 'scroll-top-btn';
   scrollTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
   scrollTopBtn.title = 'Volver arriba';
+  
+  // Añadir un estilo básico para el botón
+  scrollTopBtn.style.position = 'fixed';
+  scrollTopBtn.style.bottom = '20px';
+  scrollTopBtn.style.right = '90px';
+  scrollTopBtn.style.width = '45px';
+  scrollTopBtn.style.height = '45px';
+  scrollTopBtn.style.backgroundColor = '#4682B4';
+  scrollTopBtn.style.color = 'white';
+  scrollTopBtn.style.borderRadius = '50%';
+  scrollTopBtn.style.border = 'none';
+  scrollTopBtn.style.display = 'flex';
+  scrollTopBtn.style.alignItems = 'center';
+  scrollTopBtn.style.justifyContent = 'center';
+  scrollTopBtn.style.cursor = 'pointer';
+  scrollTopBtn.style.opacity = '0';
+  scrollTopBtn.style.transform = 'translateY(20px)';
+  scrollTopBtn.style.transition = 'opacity 0.3s, transform 0.3s, background-color 0.3s';
+  scrollTopBtn.style.zIndex = '900';
+  scrollTopBtn.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.3)';
+  
   document.body.appendChild(scrollTopBtn);
   
-  // Mostrar/ocultar botón según scroll
   window.addEventListener('scroll', () => {
     if (window.scrollY > 300) {
-      scrollTopBtn.classList.add('visible');
+      scrollTopBtn.style.opacity = '0.8';
+      scrollTopBtn.style.transform = 'translateY(0)';
     } else {
-      scrollTopBtn.classList.remove('visible');
+      scrollTopBtn.style.opacity = '0';
+      scrollTopBtn.style.transform = 'translateY(20px)';
     }
   });
   
-  // Acción de scroll al hacer clic
+  scrollTopBtn.addEventListener('mouseover', () => {
+    scrollTopBtn.style.backgroundColor = '#00e8bb';
+    scrollTopBtn.style.opacity = '1';
+    scrollTopBtn.style.transform = 'translateY(-3px)';
+    scrollTopBtn.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.4)';
+  });
+  
+  scrollTopBtn.addEventListener('mouseout', () => {
+    scrollTopBtn.style.backgroundColor = '#4682B4';
+    scrollTopBtn.style.opacity = '0.8';
+    scrollTopBtn.style.transform = 'translateY(0)';
+    scrollTopBtn.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.3)';
+  });
+  
   scrollTopBtn.addEventListener('click', () => {
     window.scrollTo({
       top: 0,
@@ -368,15 +452,10 @@ const setupScrollToTop = () => {
   });
 };
 
-// Animación para keyframes
-const addAnimationStyles = () => {
+// Añadir animaciones no críticas
+const addNonCriticalAnimations = () => {
   const styleSheet = document.createElement('style');
   styleSheet.textContent = `
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
     @keyframes pop {
       0% { transform: scale(0.8); opacity: 0.5; }
       50% { transform: scale(1.2); }
@@ -389,70 +468,15 @@ const addAnimationStyles = () => {
       100% { transform: scale(1); }
     }
     
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-      20%, 40%, 60%, 80% { transform: translateX(5px); }
-    }
-    
     @keyframes bounce {
       0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
       40% { transform: translateY(-15px); }
       60% { transform: translateY(-10px); }
     }
     
-    .scroll-top-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 90px;
-      width: 45px;
-      height: 45px;
-      background-color: #4682B4;
-      color: white;
-      border-radius: 50%;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.3s, transform 0.3s, background-color 0.3s;
-      z-index: 900;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
-    
-    .scroll-top-btn.visible {
-      opacity: 0.8;
-      transform: translateY(0);
-    }
-    
-    .scroll-top-btn:hover {
-      background-color: #FF9966;
-      opacity: 1;
-      transform: translateY(-3px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-    }
-    
-    .loading {
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .loading::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      animation: loading 1.5s infinite;
-    }
-    
-    @keyframes loading {
-      0% { left: -100%; }
-      100% { left: 100%; }
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0.7; }
+      100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
     }
   `;
   document.head.appendChild(styleSheet);
@@ -460,17 +484,30 @@ const addAnimationStyles = () => {
 
 // Inicialización al cargar el DOM
 document.addEventListener('DOMContentLoaded', () => {
-  // Añadir estilos de animación
+  // Carga crítica - ejecutar inmediatamente para el primer renderizado
   addAnimationStyles();
-  
-  // Configurar componentes
-  setupParticles();
   setupHamburgerMenu();
-  setupFadeInAnimations();
-  setupParallaxEffect();
-  setupServiceCardEffects();
-  setupContactForm();
-  setupContactLinks();
-  setupSmoothScroll();
-  setupScrollToTop();
+  
+  // Funciones para mejorar el rendimiento inicial
+  setTimeout(() => {
+    fixHeaderOnScroll();
+    fixServiceButtons();
+  }, 10);
+  
+  // Carga diferida - ejecutar después del primer renderizado
+  setTimeout(() => {
+    setupParticles();
+    setupFadeInAnimations();
+    setupParallaxEffect();
+    setupServiceCardEffects();
+    setupContactForm();
+    setupContactLinks();
+    setupSmoothScroll();
+    addNonCriticalAnimations();
+  }, 100);
+  
+  // Características no esenciales - cargar al final
+  setTimeout(() => {
+    setupScrollToTop();
+  }, 300);
 });
