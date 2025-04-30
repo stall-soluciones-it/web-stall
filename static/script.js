@@ -21,7 +21,7 @@ const setupParticles = () => {
         value: window.innerWidth <= 768 ? 30 : 45, // Reducido para aliviar carga
         density: { enable: true, value_area: 800 }
       },
-      color: { value: ['#4682B4', '#87CEEB', '#FF9966', '#D3D3D3'] },
+      color: { value: ['#4682B4', '#87CEEB', '#00e8bb', '#D3D3D3'] },
       shape: { type: 'circle', stroke: { width: 0, color: '#000000' } },
       opacity: { value: 0.5, random: true, anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false } },
       size: { value: 3, random: true, anim: { enable: false, speed: 2, size_min: 1, sync: false } },
@@ -428,7 +428,7 @@ const addAnimationStyles = () => {
     }
     
     .scroll-top-btn:hover {
-      background-color: #FF9966;
+      background-color: #00e8bb;
       opacity: 1;
       transform: translateY(-3px);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);

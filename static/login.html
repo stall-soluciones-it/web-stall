@@ -6,12 +6,14 @@
     <meta name="theme-color" content="#4682B4">
     <link rel="canonical" href="https://stall.ar/login.html">
     <title>Acceso Clientes - stall</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2025042801">
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2025043001">
 
-    <!-- Preconexión para Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <!-- Precarga de fuentes críticas -->
+    <link rel="preload" href="/fonts/montserrat-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/montserrat-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- Carga diferida de fuentes locales -->
+    <link rel="stylesheet" href="fonts.css?v=2025043001" media="print" onload="this.media='all'">
 
     <!-- Font Awesome asíncrono -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
@@ -29,7 +31,7 @@
       :root {
         --primary: #4682B4;       /* Azul principal */
         --primary-light: #87CEEB; /* Azul cielo */
-        --accent: #FF9966;        /* Naranja suave (nuevo color de acento) */
+        --accent: #00e8bb;        /* Verde mocoretá (nuevo color de acento) */
         --dark: #1C2526;          /* Oscuro principal */
         --dark-medium: #2E3A3B;   /* Oscuro medio */
         --light: #D3D3D3;         /* Gris claro */
@@ -487,7 +489,7 @@
     </style>
 
     <!-- CSS no crítico (diferido) -->
-    <link rel="stylesheet" href="styles.css?v=2025042801" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="styles.css?v=2025043001" media="print" onload="this.media='all'">
   </head>
 
   <body>
@@ -495,7 +497,7 @@
     <header class="header">
       <div class="container">
           <a href="index.html">
-              <img src="logo-small-b.png?v=2025042801" alt="Stall Soluciones IT" class="logo-img">
+              <img src="logo-small-b.png?v=2025043001" alt="Stall Soluciones IT" class="logo-img">
           </a>
           <nav class="nav">
               <ul class="nav-list nav-links">
@@ -532,7 +534,7 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="container">
-        <img src="logo-small-b.png?v=2025042801" alt="Logo de stall Soluciones IT" class="footer-logo">
+        <img src="logo-small-b.png?v=2025043001" alt="Logo de stall Soluciones IT" class="footer-logo">
         <ul class="footer-nav">
           <li><a href="index.html#inicio">Inicio</a></li>
           <li><a href="index.html#servicios">Servicios</a></li>
@@ -543,7 +545,7 @@
       </div>
     </footer>
 
-    <script src="script.js?v=2025042801"></script>
-    <script src="login.js?v=2025042801"></script>
+    <script src="script.js?v=2025043001"></script>
+    <script src="login.js?v=2025043001"></script>
   </body>
 </html>
