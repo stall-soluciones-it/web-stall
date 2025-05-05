@@ -1,0 +1,31 @@
+# Configura la normalización de finales de línea
+* text=auto
+
+# Archivos de texto explícitos
+*.html text
+*.css text
+*.js text
+*.json text
+*.md text
+*.txt text
+*.xml text
+*.yml text
+*.yaml text
+*.php text
+
+# Archivos binarios (no modificar)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
+
+# Archivos de configuración específicos
+.gitignore text
+.gitattributes text
