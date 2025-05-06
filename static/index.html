@@ -526,11 +526,17 @@
       .hero h1 {
         font-family: 'Montserrat', sans-serif;
         font-weight: 700;
-        font-size: 52px;
+        font-size: 42px; /* Reducido de 52px */
         margin-bottom: 20px;
         color: var(--primary);
         position: relative;
         display: inline-block;
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 32px;
+        }
       }
 
       .hero p {
