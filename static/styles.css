@@ -645,3 +645,9 @@ a.cta-button:hover::after, button.cta-button:hover::after {
   background-color: var(--accent);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
+
+@media (max-width: 768px) {
+  .services h2, .about h2, .contact h2 {
+    font-size: 34px;
+  }
+}
