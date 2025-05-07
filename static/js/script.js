@@ -404,7 +404,7 @@ const addAnimationStyles = () => {
     .scroll-top-btn {
       position: fixed;
       bottom: 20px;
-      right: 90px;
+      right: 20px;
       width: 45px;
       height: 45px;
       background-color: #4682B4;

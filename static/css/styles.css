@@ -466,8 +466,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   transition: transform 0.3s ease, opacity 0.3s ease;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
@@ -488,8 +488,8 @@
 }
 
 .whatsapp-float img {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   vertical-align: middle;
   border-radius: 50%;
 }
@@ -689,8 +689,8 @@ a.cta-button:hover::after, button.cta-button:hover::after {
 }
 
 .payment-icon {
-  height: 20px;
-  opacity: 0.6;
+  height: 24px;
+  opacity: 0.8;
   transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
 }
 
@@ -700,7 +700,7 @@ a.cta-button:hover::after, button.cta-button:hover::after {
 }
 
 .bitcoin-logo {
-  filter: grayscale(70%);
+  filter: grayscale(40%);
 }
 
 .bitcoin-logo:hover {
@@ -709,10 +709,18 @@ a.cta-button:hover::after, button.cta-button:hover::after {
 
 @media (max-width: 768px) {
   .payment-methods {
-    gap: 8px;
+    gap: 10px; /* Aumentado de 8px a 10px para mejor espacio entre íconos */
+    margin-top: 20px; /* Más espacio vertical */
+    padding-top: 15px; /* Más espacio para el borde superior */
   }
   
   .payment-icon {
-    height: 18px;
+    height: 22px;
+  }
+
+  /* Mejora el texto junto a los íconos */
+  .payment-text {
+    font-size: 15px; /* Ligeramente más grande */
+    opacity: 0.9; /* Más visible */
   }
 }
