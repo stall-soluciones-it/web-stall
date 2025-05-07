@@ -651,3 +651,52 @@ a.cta-button:hover::after, button.cta-button:hover::after {
     font-size: 34px;
   }
 }
+
+/* Métodos de pago en el footer */
+.payment-methods {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(70, 130, 180, 0.1);
+  flex-wrap: wrap;
+}
+
+.payment-text {
+  font-size: 14px;
+  opacity: 0.8;
+  color: var(--light);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+}
+
+.payment-icon {
+  height: 20px;
+  opacity: 0.6;
+  transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+}
+
+.payment-icon:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.bitcoin-logo {
+  filter: grayscale(70%);
+}
+
+.bitcoin-logo:hover {
+  filter: grayscale(0%);
+}
+
+@media (max-width: 768px) {
+  .payment-methods {
+    gap: 8px;
+  }
+  
+  .payment-icon {
+    height: 18px;
+  }
+}
