@@ -408,9 +408,15 @@ const setupPaymentTooltips = () => {
   
   // Agregar manejadores de eventos para cada icono
   paymentIcons.forEach(icon => {
+    // Guardar el contenido del atributo title y eliminarlo para evitar el tooltip nativo
+    const titleText = icon.getAttribute('title');
+    icon.removeAttribute('title'); // Esto elimina el tooltip nativo
+    
+    // También guardar la información como un atributo de datos para mantener la accesibilidad
+    icon.setAttribute('data-tooltip', titleText);
+    
     const showTooltip = (event) => {
-      // Obtener el texto del atributo title
-      const titleText = icon.getAttribute('title');
+      // Usar el texto guardado
       if (!titleText) return;
       
       // Posicionar el tooltip cerca del icono
