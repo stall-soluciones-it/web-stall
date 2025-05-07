@@ -434,7 +434,7 @@
 .footer::after {
   content: '';
   display: block;
-  height: 70px; /* Altura suficiente para evitar que los botones tapen el contenido */
+  height: 40px; /* Altura suficiente para evitar que los botones tapen el contenido */
   width: 100%;
 }
 

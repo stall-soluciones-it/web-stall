@@ -404,7 +404,7 @@ const addAnimationStyles = () => {
     .scroll-top-btn {
       position: fixed;
       bottom: 20px;
-      right: 20px;
+      right: 80px;
       width: 45px;
       height: 45px;
       background-color: #4682B4;
@@ -433,7 +433,13 @@ const addAnimationStyles = () => {
       transform: translateY(-3px);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     }
-    
+
+    @media (max-width: 768px) {
+      .scroll-top-btn {
+        right: 20px; /* En móvil puede estar más cerca porque WhatsApp está a la izquierda */
+      }
+    }    
+
     .loading {
       position: relative;
       overflow: hidden;
