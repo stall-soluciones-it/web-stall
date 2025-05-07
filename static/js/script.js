@@ -368,6 +368,89 @@ const setupScrollToTop = () => {
   });
 };
 
+// Configuración de tooltips táctiles para iconos de pago
+const setupPaymentTooltips = () => {
+  const paymentIcons = selectAll('.payment-icon');
+  
+  // Crear un elemento tooltip que reutilizaremos
+  const tooltip = document.createElement('div');
+  tooltip.className = 'payment-tooltip';
+  tooltip.style.display = 'none';
+  document.body.appendChild(tooltip);
+  
+  // Estilos para el tooltip
+  const tooltipStyles = document.createElement('style');
+  tooltipStyles.textContent = `
+    .payment-tooltip {
+      position: fixed;
+      background-color: rgba(46, 58, 59, 0.9);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      max-width: 200px;
+      z-index: 1100;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--primary);
+      pointer-events: none;
+      transform: translateY(-10px);
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    
+    .payment-tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  `;
+  document.head.appendChild(tooltipStyles);
+  
+  // Agregar manejadores de eventos para cada icono
+  paymentIcons.forEach(icon => {
+    const showTooltip = (event) => {
+      // Obtener el texto del atributo title
+      const titleText = icon.getAttribute('title');
+      if (!titleText) return;
+      
+      // Posicionar el tooltip cerca del icono
+      const rect = icon.getBoundingClientRect();
+      tooltip.textContent = titleText;
+      tooltip.style.top = `${rect.top - 40}px`;
+      tooltip.style.left = `${rect.left + (rect.width / 2) - 100}px`;
+      
+      // Mostrar el tooltip
+      tooltip.style.display = 'block';
+      setTimeout(() => {
+        tooltip.classList.add('visible');
+      }, 10);
+      
+      // Ocultar el tooltip después de 3 segundos
+      setTimeout(() => {
+        hideTooltip();
+      }, 3000);
+    };
+    
+    const hideTooltip = () => {
+      tooltip.classList.remove('visible');
+      setTimeout(() => {
+        tooltip.style.display = 'none';
+      }, 300);
+    };
+    
+    // Detectar click/tap en el icono
+    icon.addEventListener('click', showTooltip);
+    icon.addEventListener('touchstart', (e) => {
+      e.preventDefault(); // Prevenir el comportamiento por defecto del navegador
+      showTooltip(e);
+    }, { passive: false });
+    
+    // También seguir mostrando en hover para PC
+    icon.addEventListener('mouseenter', showTooltip);
+    icon.addEventListener('mouseleave', hideTooltip);
+  });
+};
+
 // Animación para keyframes
 const addAnimationStyles = () => {
   const styleSheet = document.createElement('style');
@@ -479,4 +562,5 @@ document.addEventListener('DOMContentLoaded', () => {
   setupContactLinks();
   setupSmoothScroll();
   setupScrollToTop();
+  setupPaymentTooltips();
 });
