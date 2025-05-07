@@ -430,6 +430,21 @@
   opacity: 0.7;
 }
 
+/* Espaciado post footer */
+.footer::after {
+  content: '';
+  display: block;
+  height: 70px; /* Altura suficiente para evitar que los botones tapen el contenido */
+  width: 100%;
+}
+
+/* Para dispositivos móviles podemos aumentar este espacio */
+@media (max-width: 768px) {
+  .footer::after {
+    height: 90px; /* Más espacio en móviles */
+  }
+}
+
 /* Animations */
 .fade-in {
   opacity: 0;
@@ -559,7 +574,8 @@ a.cta-button:hover::after, button.cta-button:hover::after {
     width: 50px;
     height: 50px;
     bottom: 15px;
-    right: 15px;
+    left: 15px;
+    right: auto;
   }
 
   .whatsapp-float img {
