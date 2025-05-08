@@ -439,7 +439,7 @@ const setupPaymentTooltips = () => {
         
         // Ajustar la posición para dispositivos móviles vs desktop
         const isMobile = window.innerWidth <= 768;
-        tooltip.style.top = `${rect.top - (isMobile ? 35 : 40)}px`;
+        tooltip.style.top = `${rect.top - (isMobile ? 50 : 60)}px`;
         tooltip.style.left = `${rect.left + (rect.width / 2) - (isMobile ? 80 : 100)}px`;
         
         // Mostrar el tooltip
