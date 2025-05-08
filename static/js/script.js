@@ -411,6 +411,34 @@ const setupPaymentTooltips = () => {
   // Variable para seguir el ícono activo actualmente
   let activeIcon = null;
   
+  // Función para detectar si es un dispositivo táctil - definida fuera del ciclo forEach
+  const isTouchDevice = () => {
+    return ('ontouchstart' in window) || 
+           (navigator.maxTouchPoints > 0) || 
+           (navigator.msMaxTouchPoints > 0);
+  };
+  
+  // Función para ocultar el tooltip - definida fuera del ciclo forEach
+  const hideTooltip = (immediate = false) => {
+    // Limpiar cualquier temporizador existente
+    clearTimeout(hideTimeout);
+    
+    if (immediate) {
+      tooltip.style.display = 'none';
+      tooltip.classList.remove('visible');
+      activeIcon = null;
+      return;
+    }
+    
+    tooltip.classList.remove('visible');
+    
+    // Esperar a que termine la transición antes de ocultarlo
+    hideTimeout = setTimeout(() => {
+      tooltip.style.display = 'none';
+      activeIcon = null;
+    }, 300);
+  };
+  
   // Agregar manejadores de eventos para cada icono
   paymentIcons.forEach(icon => {
     const titleText = icon.getAttribute('title');
@@ -459,33 +487,6 @@ const setupPaymentTooltips = () => {
       }
     };
     
-    const hideTooltip = (immediate = false) => {
-      // Limpiar cualquier temporizador existente
-      clearTimeout(hideTimeout);
-      
-      if (immediate) {
-        tooltip.style.display = 'none';
-        tooltip.classList.remove('visible');
-        activeIcon = null;
-        return;
-      }
-      
-      tooltip.classList.remove('visible');
-      
-      // Esperar a que termine la transición antes de ocultarlo
-      hideTimeout = setTimeout(() => {
-        tooltip.style.display = 'none';
-        activeIcon = null;
-      }, 300);
-    };
-    
-    // Detectar si es un dispositivo táctil
-    const isTouchDevice = () => {
-      return ('ontouchstart' in window) || 
-             (navigator.maxTouchPoints > 0) || 
-             (navigator.msMaxTouchPoints > 0);
-    };
-    
     // Para dispositivos táctiles
     icon.addEventListener('touchstart', (e) => {
       // En táctil, solo prevenimos default si no hay otro tooltip activo
@@ -514,17 +515,26 @@ const setupPaymentTooltips = () => {
   
   // Cerrar tooltip al tocar fuera de los íconos
   document.addEventListener('touchstart', (e) => {
+    // Verificar si el tooltip está visible y si se tocó fuera de un icono de pago
+    if (activeIcon && !e.target.classList.contains('payment-icon')) {
+      hideTooltip();
+    }
+  }, { passive: true });
+  
+  // Cerrar tooltip al hacer click fuera
+  document.addEventListener('click', (e) => {
+    // Verificar si el tooltip está visible y si se hizo clic fuera de un icono de pago
     if (activeIcon && !e.target.classList.contains('payment-icon')) {
       hideTooltip();
     }
   });
   
-  // Cerrar tooltip al hacer click fuera
-  document.addEventListener('click', (e) => {
-    if (activeIcon && !e.target.classList.contains('payment-icon')) {
+  // Cerrar el tooltip cuando se hace scroll (muy útil en móvil)
+  window.addEventListener('scroll', () => {
+    if (activeIcon) {
       hideTooltip();
     }
-  });
+  }, { passive: true });
 };
 
 // Animación para keyframes
