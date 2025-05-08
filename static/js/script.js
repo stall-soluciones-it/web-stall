@@ -383,7 +383,7 @@ const setupPaymentTooltips = () => {
   tooltipStyles.textContent = `
     .payment-tooltip {
       position: fixed;
-      background-color: rgba(46, 58, 59, 0.9);
+      background-color: rgba(46, 58, 59, 0.95);
       color: white;
       padding: 8px 12px;
       border-radius: 4px;
@@ -406,54 +406,124 @@ const setupPaymentTooltips = () => {
   `;
   document.head.appendChild(tooltipStyles);
   
+  // Variable para almacenar el temporizador de ocultación
+  let hideTimeout;
+  // Variable para seguir el ícono activo actualmente
+  let activeIcon = null;
+  
   // Agregar manejadores de eventos para cada icono
   paymentIcons.forEach(icon => {
-    // Guardar el contenido del atributo title y eliminarlo para evitar el tooltip nativo
     const titleText = icon.getAttribute('title');
-    icon.removeAttribute('title'); // Esto elimina el tooltip nativo
-    
-    // También guardar la información como un atributo de datos para mantener la accesibilidad
+    icon.removeAttribute('title');
     icon.setAttribute('data-tooltip', titleText);
     
     const showTooltip = (event) => {
-      // Usar el texto guardado
       if (!titleText) return;
       
-      // Posicionar el tooltip cerca del icono
-      const rect = icon.getBoundingClientRect();
-      tooltip.textContent = titleText;
-      tooltip.style.top = `${rect.top - 40}px`;
-      tooltip.style.left = `${rect.left + (rect.width / 2) - 100}px`;
+      // Limpiar cualquier temporizador existente
+      clearTimeout(hideTimeout);
       
-      // Mostrar el tooltip
-      tooltip.style.display = 'block';
-      setTimeout(() => {
-        tooltip.classList.add('visible');
-      }, 10);
+      // Si hay un ícono activo y es diferente del actual, ocultar primero el tooltip
+      if (activeIcon && activeIcon !== icon) {
+        hideTooltip(true); // Ocultar inmediatamente
+      }
       
-      // Ocultar el tooltip después de 3 segundos
-      setTimeout(() => {
-        hideTooltip();
-      }, 3000);
+      // Marcar este ícono como activo
+      activeIcon = icon;
+      
+      // Calcular la posición considerando el estado de hover/scale
+      // Usar requestAnimationFrame para posicionar después de la animación de escala
+      requestAnimationFrame(() => {
+        const rect = icon.getBoundingClientRect();
+        tooltip.textContent = titleText;
+        
+        // Ajustar la posición para dispositivos móviles vs desktop
+        const isMobile = window.innerWidth <= 768;
+        tooltip.style.top = `${rect.top - (isMobile ? 35 : 40)}px`;
+        tooltip.style.left = `${rect.left + (rect.width / 2) - (isMobile ? 80 : 100)}px`;
+        
+        // Mostrar el tooltip
+        tooltip.style.display = 'block';
+        
+        // Asegurar que la transición se active
+        requestAnimationFrame(() => {
+          tooltip.classList.add('visible');
+        });
+      });
+      
+      // En móvil dejamos más tiempo (5s), en desktop no cerramos automáticamente en hover
+      if (isTouchDevice()) {
+        hideTimeout = setTimeout(() => {
+          hideTooltip();
+        }, 5000); // 5 segundos para dispositivos táctiles
+      }
     };
     
-    const hideTooltip = () => {
-      tooltip.classList.remove('visible');
-      setTimeout(() => {
+    const hideTooltip = (immediate = false) => {
+      // Limpiar cualquier temporizador existente
+      clearTimeout(hideTimeout);
+      
+      if (immediate) {
         tooltip.style.display = 'none';
+        tooltip.classList.remove('visible');
+        activeIcon = null;
+        return;
+      }
+      
+      tooltip.classList.remove('visible');
+      
+      // Esperar a que termine la transición antes de ocultarlo
+      hideTimeout = setTimeout(() => {
+        tooltip.style.display = 'none';
+        activeIcon = null;
       }, 300);
     };
     
-    // Detectar click/tap en el icono
-    icon.addEventListener('click', showTooltip);
+    // Detectar si es un dispositivo táctil
+    const isTouchDevice = () => {
+      return ('ontouchstart' in window) || 
+             (navigator.maxTouchPoints > 0) || 
+             (navigator.msMaxTouchPoints > 0);
+    };
+    
+    // Para dispositivos táctiles
     icon.addEventListener('touchstart', (e) => {
-      e.preventDefault(); // Prevenir el comportamiento por defecto del navegador
+      // En táctil, solo prevenimos default si no hay otro tooltip activo
+      if (!activeIcon || activeIcon === icon) {
+        e.preventDefault();
+      }
       showTooltip(e);
     }, { passive: false });
     
-    // También seguir mostrando en hover para PC
+    // Para clicks (útil en ambos dispositivos)
+    icon.addEventListener('click', (e) => {
+      e.stopPropagation(); // Evitar que se propague al documento
+      showTooltip(e);
+    });
+    
+    // Para hover en escritorio
     icon.addEventListener('mouseenter', showTooltip);
-    icon.addEventListener('mouseleave', hideTooltip);
+    
+    // Solo cerramos en mouseleave si no estamos en un dispositivo táctil
+    icon.addEventListener('mouseleave', () => {
+      if (!isTouchDevice()) {
+        hideTooltip();
+      }
+    });
+  });
+  
+  // Cerrar tooltip al tocar fuera de los íconos
+  document.addEventListener('touchstart', (e) => {
+    if (activeIcon && !e.target.classList.contains('payment-icon')) {
+      hideTooltip();
+    }
+  });
+  
+  // Cerrar tooltip al hacer click fuera
+  document.addEventListener('click', (e) => {
+    if (activeIcon && !e.target.classList.contains('payment-icon')) {
+      hideTooltip();
+    }
   });
 };
 
